@@ -15,6 +15,7 @@ char randomStart();
 void startGame(char board[3][3]);
 bool checkWinner(char board[3][3], char playerSymbol);
 bool isValidValue(int cell, char board[3][3]);
+void setMoveforPlayer_AI(char board[3][3], char playerSymbol);
 void displayAfterGame();
 
 int main()
@@ -89,29 +90,6 @@ void displayBoard(char board[3][3])
     cout << "---------------" << endl;
 };
 
-void playerChooseCell(char board[3][3], char playerSymbol)
-{
-    int cell;
-    cout << "Please choose a cell (1-9): ";
-    cin >> cell; // Get the player's choice
-
-    // while loop for invalid input numbers
-    while (cell < 1 || cell > 9) {
-        cout << "Invalid choice! Please choose a cell between 1 and 9: ";
-        cin >> cell; // Get the player's choice again
-    }
-
-    // Specification B3 - Valid Move
-    bool isValidMove = isValidValue(cell, board); // Check if the cell is valid
-    if (!isValidMove) {
-        cout << "Cell already taken! Please choose another cell." << endl;
-        playerChooseCell(board, playerSymbol); // Recursive call to choose again
-    }
-    else {
-        board[(cell - 1) / 3][(cell - 1) % 3] = playerSymbol; // Place the player's symbol in the chosen cell
-    }
-}
-
 // Specification C1 - Random Start
 char randomStart()
 {
@@ -138,26 +116,22 @@ void startGame(char board[3][3])
     do {
         totalMove++;
         if (symbol == 'X') {
-            playerChooseCell(board, symbol); // Player's turn to choose a cell
-            symbol = 'O';                    // Switch to computer's turn
+            setMoveforPlayer_AI(board, symbol);
+            // after atleast 5 moves then check for winner
+            isWinner = (totalMove >= 5) ? checkWinner(board, symbol) : false; // Check for winner after 5 moves
+            if(isWinner) {
+                displayBoard(board); // Display the board if there's a winner
+                break; // Exit the loop if there's a winner
+            }
+            symbol = 'O'; // Switch to computer's turn
         }
         else {
-            // Specification C3 - AI
             cout << "Computer's turn..." << endl;
-            int cell;
-            bool isValidMove = false;
-            do {
-                cell = rand() % 9 + 1; // Randomly choose a cell from 1 to 9
-                isValidMove = isValidValue(cell, board);
-            } while (!isValidMove); // Ensure the cell is empty
-            board[(cell - 1) / 3][(cell - 1) % 3] = symbol; // Place the computer's symbol in the chosen cell
-            displayBoard(board);                            // Display the updated board after the computer's move
-            symbol = 'X';                                   // Switch back to player's turn
-        }
-        // check winner aleast after 5 moves
-        if (totalMove >= 5) {
-            isWinner = checkWinner(board, symbol);
-            cout << "iswinner: " << isWinner << endl; // Debugging line to check if there's a winner
+            setMoveforPlayer_AI(board, symbol); // Computer's turn
+            displayBoard(board); // Display the updated board after the computer's move
+            // after atleast 5 moves then check for winner
+            isWinner = (totalMove >= 5) ? checkWinner(board, symbol) : false; // Check for winner after 5 moves
+            symbol = 'X'; // Switch back to player's turn
         }
     } while (!isWinner && totalMove < 9); // Continue until there's no winner or draw
 
@@ -212,5 +186,36 @@ bool checkWinner(char board[3][3], char playerSymbol)
 
 bool isValidValue(int cell, char board[3][3])
 {
+    if (cell < 1 || cell > 9) {
+        cout << "Invalid cell number! Please choose a number between 1 and 9." << endl;
+        return false; // Invalid cell number
+    }
     return board[(cell - 1) / 3][(cell - 1) % 3] == ' '; // Check if the cell is empty
+}
+
+void setMoveforPlayer_AI(char board[3][3], char playerSymbol)
+{
+    int cell;
+    bool isValidMove = false; 
+    // Specification C3 - AI
+    if (playerSymbol == 'O') {
+        do
+        {
+            cell = rand() % 9 + 1; // Randomly choose a cell from 1 to 9
+            isValidMove = isValidValue(cell, board);
+        } while (!isValidMove); // Ensure the cell is empty
+    }
+    // Player's turn
+    else {
+        // Specification B3 - Valid Move
+        do {
+            cout << "Please choose a cell (1-9): ";
+            cin >> cell; // Get the player's choice
+            isValidMove = isValidValue(cell, board);
+            if (!isValidMove) {
+                cout << "Cell already taken! Please choose another cell." << endl; // Prompt for a valid move
+            }
+        } while (!isValidMove); 
+    }
+    board[(cell - 1) / 3][(cell - 1) % 3] = playerSymbol; // Place the player's symbol in the chosen cell
 }
