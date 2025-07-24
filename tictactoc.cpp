@@ -189,25 +189,26 @@ void startGame(char board[3][3])
 
 void displayAfterGame()
 {
-    char choice;
-    // Specification A2 - Simple Prompt
-    cout << "Do you want to play again? (y/n): ";
-    cin >> choice;
     // Specification A1 - Main Game Loop
-    if (choice == 'y' || choice == 'Y')
-    {
-        // Reset the board for a new game
-        char newBoard[3][3] = {
-            {' ', ' ', ' '},
-            {' ', ' ', ' '},
-            {' ', ' ', ' '}};
-        startGame(newBoard);
-    }
-    else
-    {
-        cout << "Thank you for playing! Goodbye!" << endl; // Exit the game
-        exit(0);
-    }
+    char choice;
+    do {
+        // Specification A2 - Simple Prompt
+        cout << "Do you want to play again? (y/n): ";
+        cin >> choice;
+        if (choice == 'y' || choice == 'Y')
+        {
+            cout << "Starting a new game... Ready to have more fun!" << endl;
+            // Create a new board
+            char board[3][3] = {
+                {' ', ' ', ' '},
+                {' ', ' ', ' '},
+                {' ', ' ', ' '}};
+    
+            startGame(board);  // Start a new game
+        }
+    } while (choice == 'y' || choice == 'Y'); 
+
+    cout << "Thank you for playing! Goodbye!" << endl;
 }
 
 bool checkWinner(char board[3][3], char playerSymbol)
