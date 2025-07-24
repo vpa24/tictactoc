@@ -42,7 +42,7 @@ int main()
         break;
     case 3:
         cout << "Exiting the game. Goodbye!" << endl;
-        exit(0); // Exit the program
+        exit(0);
     }
     return 0;
 }
@@ -126,7 +126,7 @@ void playerChooseCell(char board[3][3], char playerSymbol)
 // Specification C1 - Random Start
 char randomStart()
 {
-    int random_binary = std::rand() % 2;
+    int random_binary = rand() % 2;
     return (random_binary == 0) ? 'X' : 'O'; // Randomly return 'X' or 'O'
 }
 
@@ -175,7 +175,6 @@ void startGame(char board[3][3])
         if (totalMove >= 5)
         {
             isWinner = checkWinner(board, symbol);
-            // isDraw = checkDraw(totalMove);
         }
     } while (!isWinner && totalMove < 9); // Continue until there's no winner or draw
 
@@ -202,7 +201,7 @@ void displayAfterGame()
             {' ', ' ', ' '},
             {' ', ' ', ' '},
             {' ', ' ', ' '}};
-        startGame(newBoard); // start a new game
+        startGame(newBoard);
     }
     else
     {
@@ -216,8 +215,8 @@ bool checkWinner(char board[3][3], char playerSymbol)
     for (int i = 0; i < 3; i++)
     {
         if ((board[i][0] == playerSymbol && board[i][1] == playerSymbol && board[i][2] == playerSymbol) || // Rows
-            (board[0][i] == playerSymbol && board[1][i] == playerSymbol && board[2][i] == playerSymbol))
-        { // Columns
+            (board[0][i] == playerSymbol && board[1][i] == playerSymbol && board[2][i] == playerSymbol))   // Columns
+        {
             cout << (playerSymbol == 'O' ? " Computer is the winner!" : " You are the winner!") << endl;
             return true;
         }
