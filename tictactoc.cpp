@@ -161,9 +161,11 @@ void displayAfterGame()
     
             startGame(board);  // Start a new game
         }
+        else { //exit the game if the user chooses other than 'y' or 'Y'
+            cout << "Thank you for playing! Goodbye!" << endl;
+            exit(0); // Exit the program
+        }
     } while (choice == 'y' || choice == 'Y'); 
-
-    cout << "Thank you for playing! Goodbye!" << endl;
 }
 
 bool checkWinner(char board[3][3], char playerSymbol)
