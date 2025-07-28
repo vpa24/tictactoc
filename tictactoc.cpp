@@ -136,7 +136,7 @@ void startGame(char board[3][3])
     } while (!isWinner && totalMove < 9); // Continue until there's no winner or draw
 
     if (isWinner || totalMove == 9) {
-        if (totalMove == 9) {
+        if (totalMove == 9 && !isWinner) {
             cout << "It's a draw! There is no winner!" << endl; // If all cells are filled and no winner
         }
         displayAfterGame();
